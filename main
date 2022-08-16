@@ -1,0 +1,397 @@
+#Lines 1-147 were created by my partner, Kevinh Nguyen
+
+#Import
+from random import randint
+from time import sleep, strftime
+import tkinter as tk
+
+#Variable Initiation 
+firstnumber = []
+Romanfirstnumber = [] 
+secondnumber = [] 
+Romansecondnumber = []
+numproblems = len(firstnumber) 
+
+#Functions
+def generateintnumbers():
+  for i in range(5):
+    firstnumber.append(randint(1000,3000)) 
+    secondnumber.append(randint(0,1000)) 
+    
+def generateromannumbers(): 
+  for i in range(5):
+    Romanfirstnumber.append(intToRoman(firstnumber[i]))
+    Romansecondnumber.append(intToRoman(secondnumber[i]))
+
+def learnRoman():
+  print ("X = 1, V = 5, X = 10, L = 50, C = 100, M = 1000 \nRule 1. Symbol placed after another of equal or greater value adds its value, ie. II = 2 \nRule 2. A symbol placed before one of greater value subtracts its value, i.e. IV = 4 ")
+  Test = True 
+  score = 0 
+  while Test: #TEST 
+    for i in range(5):
+      test_guess = input("What is this in Roman Numerals, " + str(firstnumber[i]) + ": ")
+      test_guess = test_guess.upper()
+      if test_guess == Romanfirstnumber[i]: 
+        print ("Congratulations, you got it!")
+        score += 1 
+      else: 
+        print ("Oh shoot, that isn't right.") 
+    if score >= 3: 
+      print ("Congratulations you passed with a score of " + str(score) + "!")
+      Test = False
+      anotherprogram()
+    else: 
+      print ("Lets try that again, you got it!") 
+      sleep(2) 
+    
+
+def mathTest(choice, score):
+  for i in range(len(firstnumber)):
+    print(Romanfirstnumber[i], end = " ")
+    if choice == "A":
+      print (" + ", end = " ") 
+      correct = firstnumber[i] + secondnumber[i] 
+    else: 
+      print (" - ", end = " ")
+      correct = firstnumber[i] -  secondnumber[i] 
+      
+    print(Romansecondnumber[i]) 
+  #Get Answer 
+    answer = input("How much is this? ")
+    if str(answer) == str(correct): 
+      print ("Correct! ")
+      score += 1
+    else: 
+      print ("Good try! It was " + str(correct)) 
+  return score
+
+'''
+Title: Python Program To Convert Integer To Roman Source Code
+Author: Kanchan_Ray
+Date: 2021
+Code version: 1.0
+Availability: https://www.geeksforgeeks.org/python-program-to-convert-integer-to-roman/
+'''
+def intToRoman(num): 
+  
+    #Storing roman values of digits from 0-9
+    #When placed at different places
+    thousand = ["", "M", "MM", "MMM", "MMMM", "MMMMM"]
+    hundred = ["", "C", "CC", "CCC", "CD", "D",
+         "DC", "DCC", "DCCC", "CM "]
+    ten = ["", "X", "XX", "XXX", "XL", "L",
+         "LX", "LXX", "LXXX", "XC"]
+    one = ["", "I", "II", "III", "IV", "V",
+         "VI", "VII", "VIII", "IX"]
+  
+    #Converting to Roman Numerals
+    thousands = thousand[num // 1000]
+    hundreds = hundred[(num % 1000) // 100]
+    tens = ten[(num % 100) // 10]
+    ones = one[num % 10]
+  
+    ans = (thousands + hundreds +
+           tens + ones)
+    return ans
+
+def conversion(number):
+  thousand = number // 1000
+  fhundred = (number % 1000) // 500
+  hundred = (number % 500) // 100
+  fifty = (number % 100) // 50
+  ten = (number % 50) // 10
+  five = (number % 10) // 5
+  one = (number % 5) // 1
+  thousand = thousand * "M"
+  fhundred = fhundred * "D"
+  hundred = hundred * "C"
+  fifty = fifty * "L"
+  ten = ten * "X"
+  five = five * "V"
+  one = one * "I"
+  print(thousand + fhundred + hundred + fifty + ten + five + one)
+
+def calcDate(): 
+  month = intToRoman(int(strftime("%m")))
+  day = intToRoman(int(strftime("%d")))
+  year = intToRoman(int(strftime("%Y")))
+  hour = intToRoman(int(strftime("%H")))
+  minute = intToRoman(int(strftime("%M")))
+  return (month + "/" + day + "/"  + year + " Time is " + hour + ":" + minute) 
+
+def anotherprogram(): 
+  again = input("Do another program? y/n: ")
+  again = again.upper()
+  if again == "N": 
+    print ("Exiting...")
+    exit()  
+
+def endprogram():
+  exit() 
+
+def program_start():
+  stay = True
+  print ("Welcome to the Roman Numeral Learning Center")
+  sleep(1)
+  print ("Today is: " + str(calcDate())) 
+  sleep(2)
+  while stay:
+    score = 0 
+    choice = input("Select a program \n (L)earn Roman Numerals \n (A)ddition \n (S)ubtraction:")
+    choice = choice.upper()  
+    if choice == "L": 
+      learnRoman() 
+    else:
+      mathTest(choice, score)
+      print ("Your result is " + str(score) + "/5")
+      anotherprogram() 
+ 
+#GUI
+root = tk.Tk()
+root.wm_geometry()
+title = "Welcome! Today is: " + str(calcDate())
+root.title(title)
+
+#GUI Screens       
+def questions_Learn():
+  learn_screen = tk.Frame(root, width=500, height=500, background="pink")
+  learn_screen.grid(row=0, column=0, sticky="news")
+  menu_l = tk.Button(learn_screen, text = "Menu?", command=menu)
+  menu_l.pack()
+  learn = tk.Label(learn_screen, text = "This is the Learn Screen!", bg = "pink")
+  learn.pack()
+  explain = tk.Label(learn_screen, text = "Answer the questions with the appropiate Roman Numerals", bg = "pink")
+  explain.pack()
+  space = tk.Label(learn_screen, text = "", bg = "pink")
+  space.pack()
+  question1 = tk.Label(learn_screen, text = "What is this Roman Numeral? " + str(firstnumber[0]), bg = "cyan")
+  question1.pack()
+  answer1 = tk.Entry(learn_screen)
+  answer1.pack()
+  question2 = tk.Label(learn_screen, text = "What is this Roman Numeral? " + str(firstnumber[1]), bg = "cyan")
+  question2.pack()
+  answer2 = tk.Entry(learn_screen)
+  answer2.pack()
+  question3 = tk.Label(learn_screen, text = "What is this Roman Numeral? " + str(firstnumber[2]), bg = "cyan")
+  question3.pack()
+  answer3 = tk.Entry(learn_screen)
+  answer3.pack()
+  question4 = tk.Label(learn_screen, text = "What is this Roman Numeral? " + str(firstnumber[3]), bg = "cyan")
+  question4.pack()
+  answer4 = tk.Entry(learn_screen)
+  answer4.pack()
+  question5 = tk.Label(learn_screen, text = "What is this Roman Numeral? " + str(firstnumber[4]), bg = "cyan")
+  question5.pack()
+  answer5 = tk.Entry(learn_screen)
+  answer5.pack()
+  def complete():
+    score = 0
+    holder1 = str(answer1.get())
+    holder2 = str(answer2.get())
+    holder3 = str(answer3.get())
+    holder4 = str(answer4.get())
+    holder5 = str(answer5.get())
+    if holder1 == str(Romanfirstnumber[0]): 
+      print ("Congratulations, you got it!")
+      score += 1 
+    else: 
+      print ("Oh shoot, that isn't right.") 
+    if holder2 == Romanfirstnumber[1]: 
+      print ("Congratulations, you got it!")
+      score += 1 
+    else: 
+      print ("Oh shoot, that isn't right.") 
+    if holder3 == Romanfirstnumber[2]: 
+      print ("Congratulations, you got it!")
+      score += 1 
+    else: 
+      print ("Oh shoot, that isn't right.") 
+    if holder4 == Romanfirstnumber[3]: 
+      print ("Congratulations, you got it!")
+      score += 1 
+    else: 
+      print ("Oh shoot, that isn't right.") 
+    if holder5 == Romanfirstnumber[4]: 
+      print ("Congratulations, you got it!")
+      score += 1 
+    else: 
+      print ("Oh shoot, that isn't right.") 
+    scorecard = tk.Label(learn_screen, text = "Your score is " + str(score) + "!", bg = "cyan")
+    scorecard.pack()
+    again = tk.Button(learn_screen, text = "Play Again?", command = questions_Learn)
+    again.pack()
+  done = tk.Button(learn_screen, text = "Enter", command = complete)
+  done.pack()
+
+def questions_Addition():
+  add_screen = tk.Frame(root, width=500, height=500, background="purple")
+  add_screen.grid(row=0, column=0, sticky="news")
+  menu_a = tk.Button(add_screen, text = "Menu?", command=menu)
+  menu_a.pack()
+  addition = tk.Label(add_screen, text = "This is the Addition Screen!", bg = "purple", fg = "white")
+  addition.pack()
+  explain = tk.Label(add_screen, text = "Answer the questions with the appropiate Integer",bg = "purple",fg = "white")
+  explain.pack()
+  space = tk.Label(add_screen, text = "", bg = "purple")
+  space.pack()
+  question1 = tk.Label(add_screen, text = "How much is " + Romanfirstnumber[0] + " + " + Romansecondnumber[0] + " = :", bg = "purple", fg = "white")
+  question1.pack()
+  answer1 = tk.Entry(add_screen)
+  answer1.pack()
+  question2 = tk.Label(add_screen, text = "How much is " + Romanfirstnumber[1] + " + " + Romansecondnumber[1] + " = :", bg = "purple", fg = "white")
+  question2.pack()
+  answer2 = tk.Entry(add_screen)
+  answer2.pack()
+  question3 = tk.Label(add_screen, text = "How much is " + Romanfirstnumber[2] + " + " + Romansecondnumber[2] + " = :", bg = "purple", fg = "white")
+  question3.pack()
+  answer3 = tk.Entry(add_screen)
+  answer3.pack()
+  question4 = tk.Label(add_screen, text = "How much is " + Romanfirstnumber[3] + " + " + Romansecondnumber[3] + " = :", bg = "purple", fg = "white")
+  question4.pack()
+  answer4 = tk.Entry(add_screen)
+  answer4.pack()
+  question5 = tk.Label(add_screen, text = "How much is " + Romanfirstnumber[4] + " + " + Romansecondnumber[4] + " = :", bg = "purple", fg = "white")
+  question5.pack()
+  answer5 = tk.Entry(add_screen)
+  answer5.pack()
+  def complete():
+    score = 0
+    holder1 = int(answer1.get())
+    holder2 = int(answer2.get())
+    holder3 = int(answer3.get())
+    holder4 = int(answer4.get())
+    holder5 = int(answer5.get())
+    holder6 = int(firstnumber[0] + secondnumber[0]) 
+    holder7 = int(firstnumber[1] + secondnumber[1]) 
+    holder8 = int(firstnumber[2] + secondnumber[2]) 
+    holder9 = int(firstnumber[3] + secondnumber[3]) 
+    holder10 = int(firstnumber[4] + secondnumber[4]) 
+    if holder1 == holder6: 
+      print ("Congratulations, you got it!")
+      score += 1 
+    else: 
+      print ("Oh shoot, that isn't right.") 
+    if holder2 == holder7: 
+      print ("Congratulations, you got it!")
+      score += 1 
+    else: 
+      print ("Oh shoot, that isn't right.") 
+    if holder3 == holder8: 
+      print ("Congratulations, you got it!")
+      score += 1 
+    else: 
+      print ("Oh shoot, that isn't right.") 
+    if holder4 == holder9: 
+      print ("Congratulations, you got it!")
+      score += 1 
+    else: 
+      print ("Oh shoot, that isn't right.") 
+    if holder5 == holder10: 
+      print ("Congratulations, you got it!")
+      score += 1 
+    else: 
+      print ("Oh shoot, that isn't right.") 
+    scorecard = tk.Label(add_screen, text = "Your score is " + str(score) + "!", bg = "pink")
+    scorecard.pack()
+    again = tk.Button(add_screen, text = "Play Again?", command = questions_Addition)
+    again.pack()
+  done = tk.Button(add_screen, text = "Enter", command = complete)
+  done.pack()
+
+def questions_Subtraction():
+  sub_screen = tk.Frame(root, width=500, height=500, background="green")
+  sub_screen.grid(row=0, column=0, sticky="news")
+  menu_s = tk.Button(sub_screen, text = "Menu?", command=menu)
+  menu_s.pack()
+  subtraction = tk.Label(sub_screen, text = "This is the Subtraction Screen!", bg = "green", fg = "white")
+  subtraction.pack()
+  explain = tk.Label(sub_screen, text = "Answer the questions with the appropiate Integer",bg = "green",fg = "white")
+  explain.pack()
+  space = tk.Label(sub_screen, text = "", bg = "green")
+  space.pack()
+  question1 = tk.Label(sub_screen, text = "How much is " + Romanfirstnumber[0] + " - " + Romansecondnumber[0] + " = :", bg = "green", fg = "white")
+  question1.pack()
+  answer1 = tk.Entry(sub_screen)
+  answer1.pack()
+  question2 = tk.Label(sub_screen, text = "How much is " + Romanfirstnumber[1] + " - " + Romansecondnumber[1] + " = :", bg = "green", fg = "white")
+  question2.pack()
+  answer2 = tk.Entry(sub_screen)
+  answer2.pack()
+  question3 = tk.Label(sub_screen, text = "How much is " + Romanfirstnumber[2] + " - " + Romansecondnumber[2] + " = :", bg = "green", fg = "white")
+  question3.pack()
+  answer3 = tk.Entry(sub_screen)
+  answer3.pack()
+  question4 = tk.Label(sub_screen, text = "How much is " + Romanfirstnumber[3] + " - " + Romansecondnumber[3] + " = :", bg = "green", fg = "white")
+  question4.pack()
+  answer4 = tk.Entry(sub_screen)
+  answer4.pack()
+  question5 = tk.Label(sub_screen, text = "How much is " + Romanfirstnumber[4] + " - " + Romansecondnumber[4] + " = :", bg = "green", fg = "white")
+  question5.pack()
+  answer5 = tk.Entry(sub_screen)
+  answer5.pack()
+  def complete():
+    score = 0
+    holder1 = int(answer1.get())
+    holder2 = int(answer2.get())
+    holder3 = int(answer3.get())
+    holder4 = int(answer4.get())
+    holder5 = int(answer5.get())
+    holder6 = int(firstnumber[0] - secondnumber[0]) 
+    holder7 = int(firstnumber[1] - secondnumber[1]) 
+    holder8 = int(firstnumber[2] - secondnumber[2]) 
+    holder9 = int(firstnumber[3] - secondnumber[3]) 
+    holder10 = int(firstnumber[4] - secondnumber[4]) 
+    if holder1 == holder6: 
+      print ("Congratulations, you got it!")
+      score += 1 
+    else: 
+      print ("Oh shoot, that isn't right.") 
+    if holder2 == holder7: 
+      print ("Congratulations, you got it!")
+      score += 1 
+    else: 
+      print ("Oh shoot, that isn't right.") 
+    if holder3 == holder8: 
+      print ("Congratulations, you got it!")
+      score += 1 
+    else: 
+      print ("Oh shoot, that isn't right.") 
+    if holder4 == holder9: 
+      print ("Congratulations, you got it!")
+      score += 1 
+    else: 
+      print ("Oh shoot, that isn't right.") 
+    if holder5 == holder10: 
+      print ("Congratulations, you got it!")
+      score += 1 
+    else: 
+      print ("Oh shoot, that isn't right.") 
+    scorecard = tk.Label(sub_screen, text = "Your score is " + str(score) + "!", bg = "purple", fg = "white")
+    scorecard.pack()
+    again = tk.Button(sub_screen, text = "Play Again?", command = questions_Subtraction)
+    again.pack()
+  done = tk.Button(sub_screen, text = "Enter", command = complete)
+  done.pack()
+
+def menu():
+  background = tk.Frame(root, background = "cyan")
+  background.grid(row=0, column=0, sticky="news")
+  numerals = tk.Label(background, text = "I = 1, V = 5, X = 10, L = 50, C = 100, D = 500 M = 1000", bg = "cyan")
+  numerals.grid(row = 0, column = 1)
+  rule1 = tk.Label(background, text = "Rule 1. Symbol placed after another of equal or greater value adds its value, ie. II = 2", bg = "cyan")
+  rule1.grid(row = 1, column = 1)
+  rule2 = tk.Label(background, text = "Rule 2. A symbol placed before one of greater value subtracts its value, i.e. IV = 4 ", bg = "cyan")
+  rule2.grid(row = 2, column = 1)
+  learn = tk.Button(background, text = "Learn?",command=questions_Learn)
+  learn.grid(row = 3, column = 0, padx = 30, pady = 50)
+  add = tk.Button(background, text = "Addition?", command=questions_Addition)
+  add.grid(row = 3, column = 1, padx = 30)
+  sub = tk.Button(background, text = "Subtraction?", command=questions_Subtraction)
+  sub.grid(row = 3, column = 2, padx = 30)
+  end = tk.Button(background, text = "End?", command=endprogram)
+  end.grid(row = 4, column = 1, pady = 50)
+
+menu()
+generateintnumbers()
+generateromannumbers()
+program_start()
